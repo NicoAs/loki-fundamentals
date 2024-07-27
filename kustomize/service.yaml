@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-fundamentals
+  namespace: loki-fundamentals
+spec:
+  type: ClusterIP
+  selector:
+    app: loki-fundamentals
+  ports:
+    - name: http
+      port: 5005
+      protocol: TCP
+      targetPort: http

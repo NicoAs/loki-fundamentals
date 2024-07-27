@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki-fundamentals
+  namespace: loki-fundamentals
+spec:
+  minReadySeconds: 3
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 60
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: loki-fundamentals
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9797"
+      labels:
+        app: loki-fundamentals
+    spec:
+      containers:
+        - name: loki-fundamentals
+          image: ghcr.io/nicoas/loki-fundamentals:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          volumeMounts:
+            - name: task-volume-storage
+              mountPath: /app/logs/
+      volumes:
+        - name: task-volume-storage
+          persistentVolumeClaim:
+            claimName: task-pvc-storage

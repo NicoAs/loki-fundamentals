@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: loki-fundamentals
+  namespace: loki-fundamentals
+spec:
+  rules:
+    - host: carnivorous-green-house.local.nicolashomelab.com
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: http
+                port:
+                  number: 5005
